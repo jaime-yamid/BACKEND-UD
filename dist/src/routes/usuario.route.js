@@ -7,8 +7,9 @@ const express_1 = __importDefault(require("express"));
 const express_validator_1 = require("express-validator");
 const validate_fields_1 = require("../middlewares/validate-fields");
 const Usuario_controller_1 = require("../controllers/Usuario.controller");
+const validate_jwt_1 = __importDefault(require("../middlewares/validate-jwt"));
 const router = express_1.default.Router();
-router.post('/', [
+router.post('/', validate_jwt_1.default, [
     (0, express_validator_1.check)("nombre", "El Nombre es obligatorio").not().isEmpty(),
     (0, express_validator_1.check)("email", "El email es obligatorio").not().isEmpty().isEmail(),
     (0, express_validator_1.check)("telefono", "El telefono es obligatorio").not().isEmpty(),

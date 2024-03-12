@@ -1,6 +1,7 @@
 import express from "express";
 import { check } from "express-validator";
 import { validateFields } from "../middlewares/validate-fields";
+import { login } from "../controllers/auth.controller";
 
 
 //path:/api/v1/aut
@@ -15,7 +16,7 @@ router.post('/',
     check("login","El login es obiligatorio").not().isEmpty(),
     check("password","El password es obiligatorio").not().isEmpty(),
     validateFields,
-], crearUsuario);  // Asegúrate de que sea POST
+],login);  // Asegúrate de que sea POST
 
 
 //exportando mi ruta

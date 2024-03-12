@@ -1,13 +1,16 @@
 import express, { Application, Request, Response } from "express";
 import { dbConection } from "./database/conection";
 import clienteRoutes from "./routes/cliente.route";
-import usuarioRoutes from "./routes/usuario.route"
+import usuarioRoutes from "./routes/usuario.route";
+import authRoutes from "./routes/auth.router";
+
 class Server {
 private app: Application;/* una varibale de tipo provada*/
 private port: string;    /* puerto donde fluye nuestra api*/
 private apiPath = {
     clientes:"/api/v1/cliente",
     usuario:"/api/v1/usuario",
+    auth:"/api/v1/auth",
 };
     constructor() {
 
@@ -46,7 +49,7 @@ routes(): void {
         // Configuración de rutas
     this.app.use(this.apiPath.clientes, clienteRoutes);
     this.app.use(this.apiPath.usuario, usuarioRoutes);
-
+    this.app.use(this.apiPath.auth, authRoutes);
 }
 
     listen(): void{

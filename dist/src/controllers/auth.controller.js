@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.login = void 0;
 const Usuario_model_1 = __importDefault(require("../models/Usuario.model"));
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
+const jwt_1 = __importDefault(require("../helpers/jwt"));
 const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { login, password } = req.body;
     try {
@@ -30,9 +31,28 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         }
         //verificar el password
         // lo que hago es que en una costante vamos a coger la incirptacion y comparar el pasword con el login si coinciden 
-        const validarPassword = bcryptjs_1.default.compareSync(password, login);
+        const validarPassword = bcryptjs_1.default.compareSync(password, usuarioLogin.password);
+        if (!validarPassword) {
+            return res.status(401).json({
+                ok: false,
+                msg: "las credenciales no son validas",
+            });
+        }
+        // generar tolen
+        //lamo mi funcion generar token
+        const token = yield (0, jwt_1.default)(usuarioLogin._id, usuarioLogin.login);
+        res.status(200).json({
+            ok: true,
+            usuario: usuarioLogin,
+            token, // miro que con este token me deuvleva en el posman el token
+        });
     }
     catch (error) {
+        res.status(400).json({
+            ok: false,
+            error,
+            msg: "hable con el adminsitrador "
+        });
     }
 });
 exports.login = login;

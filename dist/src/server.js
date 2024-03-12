@@ -7,11 +7,13 @@ const express_1 = __importDefault(require("express"));
 const conection_1 = require("./database/conection");
 const cliente_route_1 = __importDefault(require("./routes/cliente.route"));
 const usuario_route_1 = __importDefault(require("./routes/usuario.route"));
+const auth_router_1 = __importDefault(require("./routes/auth.router"));
 class Server {
     constructor() {
         this.apiPath = {
             clientes: "/api/v1/cliente",
             usuario: "/api/v1/usuario",
+            auth: "/api/v1/auth",
         };
         this.app = (0, express_1.default)();
         this.port = process.env.PORT || "3000";
@@ -38,6 +40,7 @@ class Server {
         // Configuración de rutas
         this.app.use(this.apiPath.clientes, cliente_route_1.default);
         this.app.use(this.apiPath.usuario, usuario_route_1.default);
+        this.app.use(this.apiPath.auth, auth_router_1.default);
     }
     listen() {
         this.app.listen(this.port, () => {

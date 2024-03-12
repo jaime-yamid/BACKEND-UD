@@ -1,12 +1,13 @@
 import { Request , Response} from "express";
 import UsuarioModel from "../models/Usuario.model";
 import bcrypt from 'bcryptjs';
+import generateJWT from "../helpers/jwt";
 export const login = async (req: Request, res: Response) => {
-    const {loginUser, password}= req.body;
+    const {login, password}= req.body;
     try {
 // se verificara si el login coincide como tal 
 // el find one es busqueme el primero que encuentre como tal 
-const  usuarioLogin = await UsuarioModel.findOne({ login:loginUser});
+const  usuarioLogin = await UsuarioModel.findOne({ login:login});
 
 // si dado el caso no llega a existir entonces
 if(!usuarioLogin){
@@ -24,16 +25,20 @@ ok:false,
 msg:"las credenciales no son validas",
 
 
-    })
+    });
 }
 
-res.json({
+// generar tolen
+//lamo mi funcion generar token
+const token = await generateJWT(usuarioLogin._id, usuarioLogin.login);
+
+res.status(200).json({
 ok:true,
 usuario:usuarioLogin,
+token,   // miro que con este token me deuvleva en el posman el token
 });
-    }catch(error)
-    {
-res.json( {
+    }catch(error){
+res.status(400).json( {
     ok:false,
     error,
     msg:"hable con el adminsitrador "
@@ -41,3 +46,7 @@ res.json( {
 
     }
 };
+
+
+
+

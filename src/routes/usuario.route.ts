@@ -2,6 +2,7 @@ import express from "express";
 import { check } from "express-validator";
 import { validateFields } from "../middlewares/validate-fields";
 import { crearUsuario } from "../controllers/Usuario.controller";
+import validateJWT from "../middlewares/validate-jwt";
 
 
 
@@ -9,7 +10,7 @@ import { crearUsuario } from "../controllers/Usuario.controller";
 
 const router = express.Router();
 
-router.post('/',
+router.post('/',validateJWT, 
 [
     
     check("nombre","El Nombre es obligatorio").not().isEmpty(),
