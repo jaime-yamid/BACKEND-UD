@@ -4,7 +4,7 @@ import { Request, Response } from "express";
 const jwt = require("jsonwebtoken");
 
 // la interfaz de custom request excede las funcionalidades del request como tal 
-interface CustomRequest extends Request {
+export interface CustomRequest extends Request {
     _id?: number;
 }
 const validateJWT = (req: CustomRequest, res: Response, next: NextFunction) => {

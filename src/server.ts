@@ -3,6 +3,8 @@ import { dbConection } from "./database/conection";
 import clienteRoutes from "./routes/cliente.route";
 import usuarioRoutes from "./routes/usuario.route";
 import authRoutes from "./routes/auth.router";
+import productoRoutes from "./routes/producto.route";
+
 
 class Server {
 private app: Application;/* una varibale de tipo provada*/
@@ -11,6 +13,7 @@ private apiPath = {
     clientes:"/api/v1/cliente",
     usuario:"/api/v1/usuario",
     auth:"/api/v1/auth",
+    producto: "/api/v1/producto",
 };
     constructor() {
 
@@ -50,6 +53,7 @@ routes(): void {
     this.app.use(this.apiPath.clientes, clienteRoutes);
     this.app.use(this.apiPath.usuario, usuarioRoutes);
     this.app.use(this.apiPath.auth, authRoutes);
+    this.app.use(this.apiPath.producto, productoRoutes);
 }
 
     listen(): void{
