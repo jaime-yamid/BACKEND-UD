@@ -4,7 +4,7 @@ import clienteRoutes from "./routes/cliente.route";
 import usuarioRoutes from "./routes/usuario.route";
 import authRoutes from "./routes/auth.router";
 import productoRoutes from "./routes/producto.route";
-
+import cors from "cors";
 
 class Server {
 private app: Application;/* una varibale de tipo provada*/
@@ -32,7 +32,7 @@ private apiPath = {
 
     }
     middlewares(){
-  
+  this.app.use(cors()); // los cors para permisos para consumir mi IP 
 
         //lectrua de body todo lo metera como jeysson todo lo qie llega por medio de api se lo 
         //convierte a una APi

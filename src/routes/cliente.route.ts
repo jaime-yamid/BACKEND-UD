@@ -10,7 +10,7 @@ import validateJWT from '../middlewares/validate-jwt';
 
 const router = express.Router();
 
-router.post('/', validateJWT,
+router.post('/',
 [
     
     check("nombre","El Nombre es obligatorio").not().isEmpty(),
@@ -18,8 +18,10 @@ router.post('/', validateJWT,
     check("telefono","El telefono es obligatorio").not().isEmpty(),
     check("tipoDocumento","El tipo de documento es obligatorio").not().isEmpty(),
     check("numeroDocumento","El numero de documento es obligatorio").not().isEmpty(),validateFields,
-], crearClientes);  // Asegúrate de que sea POST
-router.get("/", validateJWT,getClientes);
+], 
+crearClientes
+);  // Asegúrate de que sea POST
+router.get("/",getClientes);
 router.get("/:id",getunClientes);
 router.put("/:id",updateCliente );
 router.delete("/:id",DeleteCliente);

@@ -12,7 +12,7 @@ const ClienteSchema = new mongoose_1.Schema({
         required: true },
     email: { type: String,
         required: true },
-    tipodeDocumento: { type: String,
+    tipoDocumento: { type: String,
         required: true },
     numeroDocumento: { type: String,
         required: true },

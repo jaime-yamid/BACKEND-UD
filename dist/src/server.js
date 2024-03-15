@@ -9,6 +9,7 @@ const cliente_route_1 = __importDefault(require("./routes/cliente.route"));
 const usuario_route_1 = __importDefault(require("./routes/usuario.route"));
 const auth_router_1 = __importDefault(require("./routes/auth.router"));
 const producto_route_1 = __importDefault(require("./routes/producto.route"));
+const cors_1 = __importDefault(require("cors"));
 class Server {
     constructor() {
         this.apiPath = {
@@ -29,6 +30,7 @@ class Server {
         this.routes();
     }
     middlewares() {
+        this.app.use((0, cors_1.default)()); // los cors para permisos para consumir mi IP 
         //lectrua de body todo lo metera como jeysson todo lo qie llega por medio de api se lo 
         //convierte a una APi
         this.app.use(express_1.default.json());

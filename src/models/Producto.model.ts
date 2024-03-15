@@ -32,7 +32,7 @@ interface opiniones {
 }
 // esa interfacz o documento sera por parte de mongo DB
 
-interface productoInterface extends Document{
+interface productoInterface{
     nombre: string;
     descripcion: string;
     precio: number;

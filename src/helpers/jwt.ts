@@ -3,7 +3,7 @@
 const jwt = require("jsonwebtoken");
 
 const generateJWT = (_id:string,
-     login: string ,
+     login: string = "" ,
      expiresIn = process.env.EXPIRES_IN,
       jwtSecret = process.env.JWT_SECRET) =>{
 
