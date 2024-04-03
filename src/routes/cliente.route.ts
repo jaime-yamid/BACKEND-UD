@@ -10,7 +10,7 @@ import validateJWT from '../middlewares/validate-jwt';
 
 const router = express.Router();
 
-router.post('/',
+router.post('/', validateJWT,
 [
     
     check("nombre","El Nombre es obligatorio").not().isEmpty(),
@@ -21,7 +21,7 @@ router.post('/',
 ], 
 crearClientes
 );  // Asegúrate de que sea POST
-router.get("/",getClientes);
+router.get("/",getClientes,validateJWT);
 router.get("/:id",getunClientes);
 router.put("/:id",updateCliente );
 router.delete("/:id",DeleteCliente);

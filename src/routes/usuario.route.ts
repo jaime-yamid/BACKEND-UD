@@ -10,7 +10,7 @@ import validateJWT from "../middlewares/validate-jwt";
 
 const router = express.Router();
 
-router.post('/',validateJWT, 
+router.post('/', 
 [
     
     check("nombre","El Nombre es obligatorio").not().isEmpty(),
@@ -20,7 +20,7 @@ router.post('/',validateJWT,
     check("numeroDocumento","El numero de  documento es obiligatorio").not().isEmpty(),
     check("login","El login es obiligatorio").not().isEmpty(),
     check("password","El password es obiligatorio").not().isEmpty(),
-    validateFields,
+
 ], crearUsuario);  // Asegúrate de que sea POST
 
 
