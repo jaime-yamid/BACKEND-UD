@@ -4,18 +4,18 @@ import bcrypt from "bcryptjs";
 
 export const  crearUsuario = async (req: Request, res: Response) => {
     const {body} = req;
-    const { login,password } = body;
+    const { user,password } = body;
    console.log(body) 
     try{
-      const  existeLogin = await UsuarioModel.findOne({
+      const  existeuser = await UsuarioModel.findOne({
       
-        login :login,
+        user:user,
       });
 
-      if (existeLogin) {
+      if (existeuser) {
         return res.status(409).json({
           ok: false,
-          msg: `Ya existe el login ${login} creado`,
+          msg: `Ya existe el Usuario ${user} creado`,
         });
       }
   

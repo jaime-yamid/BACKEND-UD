@@ -5,15 +5,15 @@ import generateJWT from "../helpers/jwt";
 import { CustomRequest } from "../middlewares/validate-jwt";
 
 
-export const login = async (req: Request, res: Response) => {
-    const {login, password}= req.body;
+export const user = async (req: Request, res: Response) => {
+    const {user, password}= req.body;
     try {
 // se verificara si el login coincide como tal 
 // el find one es busqueme el primero que encuentre como tal 
-const  usuarioLogin = await UsuarioModel.findOne({ login:login});
+const  usuarioUser = await UsuarioModel.findOne({ user:user});
 
 // si dado el caso no llega a existir entonces
-if(!usuarioLogin){
+if(!usuarioUser){
     return res.status(404).json({
         ok:false,
         msg:"Las credencias como tal no son validas"
@@ -21,7 +21,7 @@ if(!usuarioLogin){
 }
 //verificar el password
 // lo que hago es que en una costante vamos a coger la incirptacion y comparar el pasword con el login si coinciden 
-const validarPassword = bcrypt.compareSync(password,usuarioLogin.password);
+const validarPassword = bcrypt.compareSync(password,usuarioUser.password);
 if(!validarPassword){
     return res.status(401).json({
 ok:false,
@@ -33,11 +33,11 @@ msg:"las credenciales no son validas",
 
 // generar token
 //lamo mi funcion generar token
-const token = await generateJWT(usuarioLogin._id, usuarioLogin.login);
+const token = await generateJWT(usuarioUser._id, usuarioUser.user);
 
 res.status(200).json({
 ok:true,
-usuario:usuarioLogin,
+usuario:usuarioUser,
 token,   // miro que con este token me deuvleva en el posman el token
 });
     }catch(error){
@@ -100,7 +100,7 @@ if(!existEmail){
 //generar  token
 const token = await generateJWT(
     existEmail.id,
-    existEmail.login
+    existEmail.user
 );
 
 res.status(200).json({
@@ -122,9 +122,8 @@ res.status(400).json({
 
 };
 
+
 export const updateNewPassword =  async (req: CustomRequest, res: Response) => {
-
-
 try {
 const {password}= req.body;
 const salt= bcrypt.genSaltSync(10);
@@ -153,10 +152,10 @@ res.json({
     }
 
 export const olvidocontraseña = async ( req: CustomRequest, res: Response)=> {
-const {login, numeroDocumento}=req.body;
+const {user, numeroDocumento}=req.body;
 try{
     const existeUsuario = await UsuarioModel.findOne({
-         login,
+         user,
          numeroDocumento,
     });
     if(!existeUsuario){
@@ -171,7 +170,7 @@ if(id){
     // generar token
     const token = await generateJWT(
         id, 
-        login,
+        user,
         "1H", 
         process.env.JWT_SECRET_PASS
         );
@@ -190,39 +189,48 @@ res.status(400).json({
 });
 }
 }
-export const cambiocontraseña = async ( req: CustomRequest, res: Response)=> {
-const id = req._id
-const {password} = req.body;
 
 
-try {
-    if(!password){
-        res.status(400).json({
-            ok:false,
-            msg:"Error al actualizar la contraseña"
+
+export const cambiocontraseña = async (req: CustomRequest, res: Response) => {
+    const id = req._id;
+    const { password } = req.body;
+
+    try {
+        if (!password) {
+            return res.status(400).json({
+                ok: false,
+                msg: "Error al actualizar la contraseña"
+            });
+        }
+
+        // Encriptar la contraseña
+        const newpassword = bcrypt.hashSync(password, 10);
+
+        // Actualizar la contraseña
+        const actualizarpassword = await UsuarioModel.findByIdAndUpdate(
+            id, 
+            { password: newpassword },
+            { new: true }
+        );
+
+        if (!actualizarpassword) {
+            return res.status(400).json({
+                ok: false,
+                msg: "Error al actualizar la contraseña"
+            });
+        }
+
+        res.status(200).json({
+            ok: true,
+            msg: "Contraseña actualizada"
+        });
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            ok: false,
+            msg: "Error al actualizar la contraseña, hable con sus administradores"
         });
     }
-// para encriptar contraseña 
- const newpassword = bcrypt.hashSync(password, 10);
-const actualizarpassword = await UsuarioModel.findByIdAndUpdate({
-    id,
-    password: newpassword,
-});
- if(!actualizarpassword){
-    res.status(400).json({
-        ok:false,
-        msg: "error al  actualizar contraseña"
-    });
- }
- res.status(200).json({
-    ok:true,
-    msg: "contraseña actualizada",
- });
-} catch(error){
-    console.error(error);
-    res.status(400).json({
-        ok:false,
-        msg:"Error al actualizar la contraseña, hable con sus administradores"
-    });
-}
 };

@@ -1,19 +1,17 @@
 import express, { Application, Request, Response } from "express";
 import { dbConection } from "./database/conection";
-import clienteRoutes from "./routes/cliente.route";
 import usuarioRoutes from "./routes/usuario.route";
 import authRoutes from "./routes/auth.router";
-import productoRoutes from "./routes/producto.route";
 import cors from "cors";
 
 class Server {
-private app: Application;/* una varibale de tipo provada*/
-private port: string;    /* puerto donde fluye nuestra api*/
+private app: Application;
+private port: string;  
 private apiPath = {
-    clientes:"/api/v1/cliente",
+    
     usuario:"/api/v1/usuario",
     auth:"/api/v1/auth",
-    producto: "/api/v1/producto",
+   
 };
     constructor() {
 
@@ -50,10 +48,10 @@ miPrimeraApi (){
 
 routes(): void {
         // Configuración de rutas
-    this.app.use(this.apiPath.clientes, clienteRoutes);
+
     this.app.use(this.apiPath.usuario, usuarioRoutes);
     this.app.use(this.apiPath.auth, authRoutes);
-    this.app.use(this.apiPath.producto, productoRoutes);
+ 
 }
 
     listen(): void{

@@ -13,12 +13,12 @@ const validate_jwt_2 = __importDefault(require("../middlewares/validate-jwt"));
 const router = express_1.default.Router();
 // las cosas que se reciben
 router.post('/', [
-    (0, express_validator_1.check)("login", "El login es obiligatorio").not().isEmpty(),
+    (0, express_validator_1.check)("user", "El user es obiligatorio").not().isEmpty(),
     (0, express_validator_1.check)("password", "El password es obiligatorio").not().isEmpty(),
     validate_fields_1.validateFields,
-], auth_controller_1.login); // Asegúrate de que sea POST
+], auth_controller_1.user); // Asegúrate de que sea POST
 router.post('/olvidocontrasena', [
-    (0, express_validator_1.check)("login", "El login es obiligatorio").not().isEmpty(),
+    (0, express_validator_1.check)("user", "El user es obiligatorio").not().isEmpty(),
     (0, express_validator_1.check)("numeroDocumento", "El numero de Documento es obiligatorio").not().isEmpty(),
     validate_fields_1.validateFields,
 ], auth_controller_1.olvidocontraseña); // Asegúrate de que sea POST

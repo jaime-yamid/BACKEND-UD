@@ -1,7 +1,7 @@
 import express from "express";
 import { check } from "express-validator";
 import { validateFields } from "../middlewares/validate-fields";
-import { cambiocontraseña, login, olvidocontraseña, renewToken, updateNewPassword } from "../controllers/auth.controller";
+import { cambiocontraseña, user, olvidocontraseña, renewToken, updateNewPassword } from "../controllers/auth.controller";
 import validateJWT from "../middlewares/validate-jwt";
 import validateJWTpass from "../middlewares/validate-jwt";
 
@@ -14,17 +14,17 @@ const router = express.Router();
 router.post('/',
 [
   
-    check("login","El login es obiligatorio").not().isEmpty(),
+    check("user","El user es obiligatorio").not().isEmpty(),
     check("password","El password es obiligatorio").not().isEmpty(),
     validateFields,
 ],
-login
+user
 );  // Asegúrate de que sea POST
 
 router.post('/olvidocontrasena',
 [
   
-    check("login","El login es obiligatorio").not().isEmpty(),
+    check("user","El user es obiligatorio").not().isEmpty(),
     check("numeroDocumento","El numero de Documento es obiligatorio").not().isEmpty(),
     validateFields,
 ],olvidocontraseña);  // Asegúrate de que sea POST

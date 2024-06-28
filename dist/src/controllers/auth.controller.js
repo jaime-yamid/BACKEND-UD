@@ -12,18 +12,18 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.cambiocontraseña = exports.olvidocontraseña = exports.updateNewPassword = exports.exisitLogin = exports.renewToken = exports.login = void 0;
+exports.cambiocontraseña = exports.olvidocontraseña = exports.updateNewPassword = exports.exisitLogin = exports.renewToken = exports.user = void 0;
 const Usuario_model_1 = __importDefault(require("../models/Usuario.model"));
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const jwt_1 = __importDefault(require("../helpers/jwt"));
-const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { login, password } = req.body;
+const user = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { user, password } = req.body;
     try {
         // se verificara si el login coincide como tal 
         // el find one es busqueme el primero que encuentre como tal 
-        const usuarioLogin = yield Usuario_model_1.default.findOne({ login: login });
+        const usuarioUser = yield Usuario_model_1.default.findOne({ user: user });
         // si dado el caso no llega a existir entonces
-        if (!usuarioLogin) {
+        if (!usuarioUser) {
             return res.status(404).json({
                 ok: false,
                 msg: "Las credencias como tal no son validas"
@@ -31,7 +31,7 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         }
         //verificar el password
         // lo que hago es que en una costante vamos a coger la incirptacion y comparar el pasword con el login si coinciden 
-        const validarPassword = bcryptjs_1.default.compareSync(password, usuarioLogin.password);
+        const validarPassword = bcryptjs_1.default.compareSync(password, usuarioUser.password);
         if (!validarPassword) {
             return res.status(401).json({
                 ok: false,
@@ -40,10 +40,10 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         }
         // generar token
         //lamo mi funcion generar token
-        const token = yield (0, jwt_1.default)(usuarioLogin._id, usuarioLogin.login);
+        const token = yield (0, jwt_1.default)(usuarioUser._id, usuarioUser.user);
         res.status(200).json({
             ok: true,
-            usuario: usuarioLogin,
+            usuario: usuarioUser,
             token, // miro que con este token me deuvleva en el posman el token
         });
     }
@@ -55,7 +55,7 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         });
     }
 });
-exports.login = login;
+exports.user = user;
 // funcion para sacar mi token o validar mi token si se encuentra activo 
 const renewToken = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const id = req._id;
@@ -98,7 +98,7 @@ const exisitLogin = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
             });
         }
         //generar  token
-        const token = yield (0, jwt_1.default)(existEmail.id, existEmail.login);
+        const token = yield (0, jwt_1.default)(existEmail.id, existEmail.user);
         res.status(200).json({
             ok: true,
             usuario: existEmail,
@@ -139,10 +139,10 @@ const updateNewPassword = (req, res) => __awaiter(void 0, void 0, void 0, functi
 });
 exports.updateNewPassword = updateNewPassword;
 const olvidocontraseña = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { login, numeroDocumento } = req.body;
+    const { user, numeroDocumento } = req.body;
     try {
         const existeUsuario = yield Usuario_model_1.default.findOne({
-            login,
+            user,
             numeroDocumento,
         });
         if (!existeUsuario) {
@@ -155,7 +155,7 @@ const olvidocontraseña = (req, res) => __awaiter(void 0, void 0, void 0, functi
         const id = existeUsuario === null || existeUsuario === void 0 ? void 0 : existeUsuario._id;
         if (id) {
             // generar token
-            const token = yield (0, jwt_1.default)(id, login, "1H", process.env.JWT_SECRET_PASS);
+            const token = yield (0, jwt_1.default)(id, user, "1H", process.env.JWT_SECRET_PASS);
             res.status(200).json({
                 ok: true,
                 msg: "Proceso de exito",
@@ -178,31 +178,29 @@ const cambiocontraseña = (req, res) => __awaiter(void 0, void 0, void 0, functi
     const { password } = req.body;
     try {
         if (!password) {
-            res.status(400).json({
+            return res.status(400).json({
                 ok: false,
                 msg: "Error al actualizar la contraseña"
             });
         }
-        // para encriptar contraseña 
+        // Encriptar la contraseña
         const newpassword = bcryptjs_1.default.hashSync(password, 10);
-        const actualizarpassword = yield Usuario_model_1.default.findByIdAndUpdate({
-            id,
-            password: newpassword,
-        });
+        // Actualizar la contraseña
+        const actualizarpassword = yield Usuario_model_1.default.findByIdAndUpdate(id, { password: newpassword }, { new: true });
         if (!actualizarpassword) {
-            res.status(400).json({
+            return res.status(400).json({
                 ok: false,
-                msg: "error al  actualizar contraseña"
+                msg: "Error al actualizar la contraseña"
             });
         }
         res.status(200).json({
             ok: true,
-            msg: "contraseña actualizada",
+            msg: "Contraseña actualizada"
         });
     }
     catch (error) {
         console.error(error);
-        res.status(400).json({
+        res.status(500).json({
             ok: false,
             msg: "Error al actualizar la contraseña, hable con sus administradores"
         });

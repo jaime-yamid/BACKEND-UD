@@ -1,8 +1,8 @@
 import express from "express";
 import { check } from "express-validator";
-import { validateFields } from "../middlewares/validate-fields";
+
 import { crearUsuario } from "../controllers/Usuario.controller";
-import validateJWT from "../middlewares/validate-jwt";
+
 
 
 
@@ -18,7 +18,7 @@ router.post('/',
     check("telefono","El telefono es obligatorio").not().isEmpty(),
     check("tipoDocumento","El tipo de documento es obiligatorio").not().isEmpty(),
     check("numeroDocumento","El numero de  documento es obiligatorio").not().isEmpty(),
-    check("login","El login es obiligatorio").not().isEmpty(),
+    check("user","El user es obiligatorio").not().isEmpty(),
     check("password","El password es obiligatorio").not().isEmpty(),
 
 ], crearUsuario);  // Asegúrate de que sea POST

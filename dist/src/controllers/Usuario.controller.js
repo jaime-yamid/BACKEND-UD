@@ -17,16 +17,16 @@ const Usuario_model_1 = __importDefault(require("../models/Usuario.model"));
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const crearUsuario = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { body } = req;
-    const { login, password } = body;
+    const { user, password } = body;
     console.log(body);
     try {
-        const existeLogin = yield Usuario_model_1.default.findOne({
-            login: login,
+        const existeuser = yield Usuario_model_1.default.findOne({
+            user: user,
         });
-        if (existeLogin) {
+        if (existeuser) {
             return res.status(409).json({
                 ok: false,
-                msg: `Ya existe el login ${login} creado`,
+                msg: `Ya existe el Usuario ${user} creado`,
             });
         }
         // Los tres punticos es traigame los datos del body
