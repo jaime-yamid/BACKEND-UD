@@ -3,6 +3,7 @@ import { dbConection } from "./database/conection";
 import usuarioRoutes from "./routes/usuario.route";
 import authRoutes from "./routes/auth.router";
 import cors from "cors";
+import interaccionRoutes from "./routes/interaccion.route";
 
 class Server {
 private app: Application;
@@ -11,6 +12,7 @@ private apiPath = {
     
     usuario:"/api/v1/usuario",
     auth:"/api/v1/auth",
+    interaccion: "/api/v1/interaccion/",
    
 };
     constructor() {
@@ -51,6 +53,7 @@ routes(): void {
 
     this.app.use(this.apiPath.usuario, usuarioRoutes);
     this.app.use(this.apiPath.auth, authRoutes);
+    this.app.use(this.apiPath.interaccion, interaccionRoutes);
  
 }
 
