@@ -34,19 +34,20 @@ const solicitarRecuperacion = (req, res) => __awaiter(void 0, void 0, void 0, fu
         const originalPassword = usuario.password;
         // Actualizar el usuario con la contraseña temporal y la fecha de expiración
         usuario.password = hashedTempPassword;
-        usuario.tempPasswordExpiration = new Date(Date.now() + 20 * 60 * 1000); // 20 minutos
+        usuario.tempPasswordExpiration = new Date(Date.now() + 2 * 60 * 1000); // 20 minutos
         yield usuario.save();
         // Enviar correo con la contraseña temporal
-        yield (0, mail_1.enviarCorreoInteraccion)(email, tempPassword);
+        yield (0, mail_1.enviarCorreoInteraccion)(usuario.nombre, email, tempPassword);
         // Configurar un temporizador para restaurar la contraseña original después de 20 minutos
         setTimeout(() => __awaiter(void 0, void 0, void 0, function* () {
             const usuarioActualizado = yield Usuario_model_1.default.findOne({ email });
             if (usuarioActualizado && usuarioActualizado.tempPasswordExpiration && usuarioActualizado.tempPasswordExpiration < new Date()) {
+                console.log(`Restaurando la contraseña original para el usuario ${usuarioActualizado.email}.`);
                 usuarioActualizado.password = originalPassword; // Restaurar la contraseña original
                 usuarioActualizado.tempPasswordExpiration = undefined; // Limpiar la expiración
                 yield usuarioActualizado.save();
             }
-        }), 20 * 60 * 1000); // 20 minutos
+        }), 2 * 60 * 1000); // 20 minutos
         res.status(200).json({
             ok: true,
             msg: "Correo de recuperación enviado exitosamente",

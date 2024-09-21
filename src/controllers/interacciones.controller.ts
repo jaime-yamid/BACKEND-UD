@@ -26,21 +26,24 @@ export const solicitarRecuperacion = async (req: Request, res: Response) => {
 
     // Actualizar el usuario con la contraseña temporal y la fecha de expiración
     usuario.password = hashedTempPassword;
-    usuario.tempPasswordExpiration = new Date(Date.now() + 20 * 60 * 1000); // 20 minutos
+    usuario.tempPasswordExpiration = new Date(Date.now() + 2 * 60 * 1000); // 20 minutos
     await usuario.save();
 
     // Enviar correo con la contraseña temporal
-    await enviarCorreoInteraccion(email, tempPassword);
+    await enviarCorreoInteraccion(usuario.nombre, email, tempPassword);
 
     // Configurar un temporizador para restaurar la contraseña original después de 20 minutos
     setTimeout(async () => {
       const usuarioActualizado = await UsuarioModel.findOne({ email });
       if (usuarioActualizado && usuarioActualizado.tempPasswordExpiration && usuarioActualizado.tempPasswordExpiration < new Date()) {
+        console.log(`Restaurando la contraseña original para el usuario ${usuarioActualizado.email}.`);
         usuarioActualizado.password = originalPassword; // Restaurar la contraseña original
+
         usuarioActualizado.tempPasswordExpiration = undefined; // Limpiar la expiración
         await usuarioActualizado.save();
       }
-    }, 20 * 60 * 1000); // 20 minutos
+    }, 2 * 60 * 1000); // 20 minutos
+
 
     res.status(200).json({
       ok: true,

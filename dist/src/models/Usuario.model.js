@@ -14,6 +14,10 @@ const UsuarioSchema = new mongoose_1.Schema({
         type: Date,
         default: Date.now(),
     },
+    tempPasswordExpiration: {
+        type: Date,
+        default: null,
+    },
 });
 const UsuarioModel = (0, mongoose_1.model)("usuario", UsuarioSchema); //Asi se crea mi cliente esquema opr el nombre que
 // se coloca entre comillas

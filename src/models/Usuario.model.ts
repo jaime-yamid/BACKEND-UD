@@ -14,6 +14,11 @@ const UsuarioSchema = new Schema({
     type: Date,
     default: Date.now(),
   },
+  tempPasswordExpiration: {
+    type: Date,
+    default: null,
+  },
+
 });
 
 const UsuarioModel: Model<any> = model("usuario", UsuarioSchema); //Asi se crea mi cliente esquema opr el nombre que
