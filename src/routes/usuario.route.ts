@@ -20,7 +20,7 @@ router.post('/',
     check("numeroDocumento","El numero de  documento es obiligatorio").not().isEmpty(),
     check("user","El user es obiligatorio").not().isEmpty(),
     check("password","El password es obiligatorio").not().isEmpty(),
-
+    check("rol","El rol es obiligatorio").not().isEmpty(),
 ], crearUsuario);  // Asegúrate de que sea POST
 
 
