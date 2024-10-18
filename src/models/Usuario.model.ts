@@ -8,7 +8,10 @@ const UsuarioSchema = new Schema({
   numeroDocumento: { type: String, required: true, unique: true },
   user: { type: String, required: true, unique: true },
   password: { type: String, required: true },
-  rol: { type: String, required: true, default: "Administrador" },
+  publicKeyUrl: { type: String, required: false },
+  privateKeyUrl: { type: String, required: false },
+  certificateUrl: { type: String, required: false },
+  rol: { type: String, required: true  },
   estado: { type: Boolean, required: true, default: true },
   createdAt: {
     type: Date,
