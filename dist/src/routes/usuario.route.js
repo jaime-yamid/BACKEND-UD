@@ -15,6 +15,7 @@ router.post('/', [
     (0, express_validator_1.check)("numeroDocumento", "El numero de  documento es obiligatorio").not().isEmpty(),
     (0, express_validator_1.check)("user", "El user es obiligatorio").not().isEmpty(),
     (0, express_validator_1.check)("password", "El password es obiligatorio").not().isEmpty(),
+    (0, express_validator_1.check)("rol", "El rol es obiligatorio").not().isEmpty(),
 ], Usuario_controller_1.crearUsuario); // Asegúrate de que sea POST
 //exportando mi ruta
 exports.default = router;
